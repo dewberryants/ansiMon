@@ -1,7 +1,7 @@
 #include <ftxui/component/component.hpp>
 #include <ftxui/component/screen_interactive.hpp>
 #include <ftxui/dom/canvas.hpp>
-#include <components/settings_tab.hpp>
+#include "settings_tab.hpp"
 
 
 int main() {

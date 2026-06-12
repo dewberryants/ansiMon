@@ -26,9 +26,12 @@ FetchContent_Declare(ftxui
 FetchContent_MakeAvailable(ftxui)
 # ------------------------------------------------------------------------------
 
-add_executable(AsciiMon src/main.cpp)
+add_executable(AsciiMon 
+    src/main.cpp 
+    src/settings_tab.cpp
+)
 
-target_include_directories(AsciiMon PRIVATE src)
+target_include_directories(AsciiMon PRIVATE src include)
 
 target_link_libraries(AsciiMon
   PRIVATE ftxui::screen
