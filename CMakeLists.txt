@@ -2,7 +2,7 @@ cmake_minimum_required (VERSION 3.22)
 
 project(AsciiMon
   LANGUAGES CXX
-  VERSION 0.0.01
+  VERSION 0.0.1
 )
 
 set(CMAKE_CXX_STANDARD 17)
@@ -28,10 +28,13 @@ FetchContent_MakeAvailable(ftxui)
 
 add_executable(AsciiMon 
     src/main.cpp 
-    src/settings_tab.cpp
+    src/ui.cpp
 )
 
-target_include_directories(AsciiMon PRIVATE src include)
+target_include_directories(AsciiMon PRIVATE
+    ${CMAKE_SOURCE_DIR}/src
+    ${CMAKE_SOURCE_DIR}/include
+)
 
 target_link_libraries(AsciiMon
   PRIVATE ftxui::screen

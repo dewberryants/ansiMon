@@ -1,15 +1,16 @@
 #include <ftxui/component/component.hpp>
 #include <ftxui/component/screen_interactive.hpp>
 #include <ftxui/dom/canvas.hpp>
-#include "settings_tab.hpp"
+#include "ui.hpp"
+#include "game_state.hpp"
 
 
 int main() {
     using namespace ftxui;
 
-    bool musicEnabled = true;
-    int volume = 80;
     int selectedTab = 0;
+
+    GameState *state = new GameState();
 
 
     ScreenInteractive screen = ScreenInteractive::FitComponent();
@@ -23,14 +24,13 @@ int main() {
     });
 
     Component creaturesTab = Renderer([] { return text("Creatures...") | center; });
-    Component inventoryTab = Renderer([] { return text("Inventory...") | center; });
+    Component inventoryTab = game::MakeInventoryTab(state->player.inventory);
     Component playerTab = Renderer([] { return text("Player...") | center; });
-    Component settingsTab = game::MakeSettingsTab(musicEnabled, volume);
+    Component settingsTab = game::MakeSettingsTab(state->settings.musicEnabled, state->settings.volume);
 
     Component tab = Container::Tab({
         gameTab,
         creaturesTab,
-        playerTab,
         inventoryTab,
         settingsTab
     }, &selectedTab);
@@ -38,7 +38,6 @@ int main() {
     std::vector<std::string> tabTitles = {
         "| Game",
         "| Creatures",
-        "| Player",
         "| Inventory",
         "| Settings"
     };
@@ -68,6 +67,9 @@ int main() {
             })
          });
     });
+
+    Item test1 {1};
+    state->player.inventory.items.push_back(test1);
   
     screen.Loop(mainRenderer);
 }
