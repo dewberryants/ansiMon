@@ -1,7 +1,43 @@
+#include <iostream>
+
 #include "ui.hpp"
 #include "game_state.hpp"
 
+
 namespace game {
+
+    ftxui::Component InventoryUI::GetRenderer() {
+        using namespace ftxui;
+        if (InventoryDisturbed) {
+            auto btn = Button("Add Dummy", [&] {inventory.items.push_back(Item()); InventoryDisturbed = true; std::cerr << "shwoop!";}, ButtonOption::Simple());
+            RebuildInternals();
+            container->Add(btn);
+        }
+
+        return Renderer(container, [&] {
+            return hbox({ container->Render() | border | size(WIDTH, EQUAL, 45),
+                    text(currentDescription) | border | size(WIDTH, EQUAL, 45)
+                });
+            });
+    }
+
+    void InventoryUI::RebuildInternals() {
+        int c = 0;
+        container->DetachAllChildren();
+        for (auto const& item : inventory.items) {
+            auto button = Button(std::to_string(item.id), [&] {
+                    currentDescription = std::to_string(item.id);
+                    currentSelection = c;
+                }, style);
+            container->Add(button);
+            c++;
+        }
+    }
+
+    int InventoryUI::GetInventorySize() {
+        return inventory.items.size();
+    }
+
     ftxui::Component MakeSettingsTab(bool& musicEnabled, int& volume) {
         using namespace ftxui;
 
@@ -38,9 +74,18 @@ namespace game {
                 container->Add(button);
             }
 
-            return hbox({ container->Render() | border,
-                    text(editContent) | border
+            return hbox({ container->Render() | border | size(WIDTH, EQUAL, 45),
+                    text(editContent) | border | size(WIDTH, EQUAL, 45)
                 });
+            });
+    }
+
+    ftxui::Component GameCanvas(GameState& state) {
+        using namespace ftxui;
+        return Renderer([] {
+            Canvas c = Canvas(90, 22);
+            c.DrawText(0, 0, "This is the game renderer!");
+            return canvas(std::move(c));
             });
     }
 } // namespace game

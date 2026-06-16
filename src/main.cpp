@@ -10,23 +10,19 @@ int main() {
 
     int selectedTab = 0;
 
-    GameState *state = new GameState();
+    GameState state = GameState{};
+    game::UIHandler ui;
 
 
     ScreenInteractive screen = ScreenInteractive::FitComponent();
 
     Component exitButton = Button("Quit", screen.ExitLoopClosure(), ButtonOption::Ascii());
 
-    Component gameTab = Renderer([] {
-        Canvas c = Canvas(90, 22);
-        c.DrawText(0, 0, "This is the game renderer!");
-        return canvas(std::move(c));
-    });
-
+    Component gameTab = game::GameCanvas(state);
     Component creaturesTab = Renderer([] { return text("Creatures...") | center; });
-    Component inventoryTab = game::MakeInventoryTab(state->player.inventory);
+    Component inventoryTab = ui.inventory.GetRenderer();
     Component playerTab = Renderer([] { return text("Player...") | center; });
-    Component settingsTab = game::MakeSettingsTab(state->settings.musicEnabled, state->settings.volume);
+    Component settingsTab = game::MakeSettingsTab(state.settings.musicEnabled, state.settings.volume);
 
     Component tab = Container::Tab({
         gameTab,
@@ -68,8 +64,10 @@ int main() {
          });
     });
 
-    Item test1 {1};
-    state->player.inventory.items.push_back(test1);
+    for (int i = 0; i < 10; i++) {
+        Item dummy{ i };
+        state.player.inventory.items.push_back(dummy);
+    }
   
     screen.Loop(mainRenderer);
 }

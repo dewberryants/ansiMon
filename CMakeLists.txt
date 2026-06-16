@@ -10,7 +10,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-# --- Fetch FTXUI --------------------------------------------------------------
+# --- Fetch FTXUI & GTEST -------------------------------------------------------
 include(FetchContent)
 
 set(FETCHCONTENT_UPDATES_DISCONNECTED ON)
@@ -24,11 +24,19 @@ FetchContent_Declare(ftxui
   EXCLUDE_FROM_ALL
 )
 FetchContent_MakeAvailable(ftxui)
+
+FetchContent_Declare(
+    googletest
+    URL https://github.com/google/googletest/archive/refs/tags/v1.17.0.zip
+)
+FetchContent_MakeAvailable(googletest)
+
 # ------------------------------------------------------------------------------
 
 add_executable(AsciiMon 
     src/main.cpp 
     src/ui.cpp
+    src/data.cpp
 )
 
 target_include_directories(AsciiMon PRIVATE
@@ -42,8 +50,9 @@ target_link_libraries(AsciiMon
   PRIVATE ftxui::component
 )
 
-include(CTest)
+option(BUILD_TESTING "Build tests" ON)
 
 if(BUILD_TESTING)
-	add_subdirectory(tests)
+    enable_testing()
+    add_subdirectory(tests)
 endif()
