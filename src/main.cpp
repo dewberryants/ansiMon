@@ -64,10 +64,10 @@ int main() {
          });
     });
 
-    for (int i = 0; i < 10; i++) {
+    /*for (int i = 0; i < 10; i++) {
         Item dummy{ i };
-        state.player.inventory.items.push_back(dummy);
-    }
+        state.player.inventory.AddItem(dummy);
+    }*/
   
     screen.Loop(mainRenderer);
 }

@@ -1,5 +1,8 @@
 #pragma once
 
+#include <ftxui/component/event.hpp>
+#include <ftxui/component/screen_interactive.hpp>
+
 #include <vector>
 #include <data.hpp>
 
@@ -18,8 +21,16 @@ struct Map {
 
 class Inventory {
 public:
+    void AddItem(Item item) {
+        using namespace ftxui;
+        items.push_back(item);
+        ScreenInteractive::Active()->Post(Event::Special("InventoryDisturbed"));
+    }
+    std::vector<Item> GetItems() {
+        return items;
+    }
+private:
     std::vector<Item> items;
-    std::string currentDescription = "Hi!";
 };
 
 class Player {

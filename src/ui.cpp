@@ -6,36 +6,53 @@
 
 namespace game {
 
+    ftxui::ButtonOption InventoryItemStyle() {
+        using namespace ftxui;
+        ButtonOption style = ftxui::ButtonOption::Animated(ftxui::Color::Default, ftxui::Color::GrayDark, ftxui::Color::Default, ftxui::Color::White);
+        style.transform = [](const EntryState& s) {
+            auto element = text(s.label);
+            if (s.focused) {
+                element |= bold;
+            }
+            return element | center | borderEmpty | size(HEIGHT, EQUAL, 3);
+            };
+        return style;
+    }
+
     ftxui::Component InventoryUI::GetRenderer() {
         using namespace ftxui;
-        if (InventoryDisturbed) {
-            auto btn = Button("Add Dummy", [&] {inventory.items.push_back(Item()); InventoryDisturbed = true; std::cerr << "shwoop!";}, ButtonOption::Simple());
-            RebuildInternals();
-            container->Add(btn);
-        }
-
         return Renderer(container, [&] {
-            return hbox({ container->Render() | border | size(WIDTH, EQUAL, 45),
+            return hbox({ container->Render() | border | size(WIDTH, EQUAL, 45) | vscroll_indicator,
                     text(currentDescription) | border | size(WIDTH, EQUAL, 45)
                 });
-            });
+            }) | CatchEvent([&](Event event) {
+                if (event == Event::Special("InventoryDisturbed")) {
+                    std::cerr << "BOO!";
+                    RebuildInternals();
+                    return true;
+                }
+                return false;
+                });
     }
 
     void InventoryUI::RebuildInternals() {
+        using namespace ftxui;
         int c = 0;
         container->DetachAllChildren();
-        for (auto const& item : inventory.items) {
-            auto button = Button(std::to_string(item.id), [&] {
-                    currentDescription = std::to_string(item.id);
+        auto btn = Button("Add Dummy", [&] {inventory.AddItem(Item()); std::cerr << "shwoop!";}, ButtonOption::Simple());
+        container->Add(btn);
+        for (auto const& item : inventory.GetItems()) {
+            auto button = Button(std::to_string(c), [&] {
+                    currentDescription = std::to_string(c);
                     currentSelection = c;
-                }, style);
+                }, InventoryItemStyle());
             container->Add(button);
             c++;
         }
     }
 
     int InventoryUI::GetInventorySize() {
-        return inventory.items.size();
+        return inventory.GetItems().size();
     }
 
     ftxui::Component MakeSettingsTab(bool& musicEnabled, int& volume) {
@@ -69,7 +86,7 @@ namespace game {
 
             auto style = ButtonOption::Animated(Color::Default, Color::GrayDark, Color::Default, Color::White);
 
-            for (auto const& item : inventory.items) {
+            for (auto const& item : inventory.GetItems()) {
                 auto button = Button(std::to_string(item.id), [&item, &editContent] {editContent = std::to_string(item.id);}, style);
                 container->Add(button);
             }

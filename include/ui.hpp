@@ -7,7 +7,9 @@
 namespace game {
     class InventoryUI {
     public:
-        InventoryUI::InventoryUI(Inventory& inv) : inventory(inv), currentSelection(0), InventoryDisturbed(true), container(ftxui::Container::Vertical({})) {};
+        InventoryUI::InventoryUI(Inventory& inv) : inventory(inv), currentSelection(0), container(ftxui::Container::Vertical({})) {
+            RebuildInternals();
+        }
         ftxui::Component GetRenderer();
         void RebuildInternals();
         int GetInventorySize();
@@ -15,8 +17,6 @@ namespace game {
         ftxui::Component container;
         std::string currentDescription;
         int currentSelection = 0;
-        bool InventoryDisturbed = false;
-        ftxui::ButtonOption style = ftxui::ButtonOption::Animated(ftxui::Color::Default, ftxui::Color::GrayDark, ftxui::Color::Default, ftxui::Color::White);
         Inventory& inventory;
     };
 
