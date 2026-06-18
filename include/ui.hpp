@@ -4,10 +4,10 @@
 #include <ftxui/dom/elements.hpp>
 #include <game_state.hpp>
 
-namespace game {
+namespace UI {
     class InventoryUI {
     public:
-        InventoryUI::InventoryUI(Inventory& inv) : inventory(inv), currentSelection(0), container(ftxui::Container::Vertical({})) {
+        InventoryUI(Inventory& inv) : inventory(inv), currentSelection(0), container(ftxui::Container::Vertical({})) {
             RebuildInternals();
         }
         ftxui::Component GetRenderer();
@@ -20,14 +20,30 @@ namespace game {
         Inventory& inventory;
     };
 
+    class SettingsUI {
+    public:
+        SettingsUI(Settings& gameSettings) : settings(gameSettings) {}
+        ftxui::Component GetRenderer();
+    private:
+        Settings& settings;
+    };
+
+    class CreaturesUI {
+    public:
+        CreaturesUI(std::vector<Creature>& creatures) : team(creatures) {}
+        ftxui::Component GetRenderer();
+    private:
+        std::vector<Creature>& team;
+    };
+
     class UIHandler {
     public:
         InventoryUI inventory = InventoryUI(state.player.inventory);
+        SettingsUI settings = SettingsUI(state.settings);
+        CreaturesUI creatures = CreaturesUI(state.player.team);
     private:
         GameState state;
     };
 
-    ftxui::Component MakeSettingsTab(bool& musicEnabled, int& volume);
-    ftxui::Component MakeInventoryTab(Inventory& inventory);
     ftxui::Component GameCanvas(GameState& state);
-} // namespace game
+} // namespace UI

@@ -33,9 +33,15 @@ private:
     std::vector<Item> items;
 };
 
+class Creature {
+private:
+    int speciesID;
+};
+
 class Player {
 public:
     Inventory inventory;
+    std::vector<Creature> team;
 };
 
 class World {

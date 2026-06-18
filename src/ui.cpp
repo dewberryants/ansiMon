@@ -4,7 +4,7 @@
 #include "game_state.hpp"
 
 
-namespace game {
+namespace UI {
 
     ftxui::ButtonOption InventoryItemStyle() {
         using namespace ftxui;
@@ -14,7 +14,7 @@ namespace game {
             if (s.focused) {
                 element |= bold;
             }
-            return element | center | borderEmpty | size(HEIGHT, EQUAL, 3);
+            return element | size(HEIGHT, EQUAL, 1);
             };
         return style;
     }
@@ -22,8 +22,8 @@ namespace game {
     ftxui::Component InventoryUI::GetRenderer() {
         using namespace ftxui;
         return Renderer(container, [&] {
-            return hbox({ container->Render() | border | size(WIDTH, EQUAL, 45) | vscroll_indicator,
-                    text(currentDescription) | border | size(WIDTH, EQUAL, 45)
+            return hbox({ container->Render() | vscroll_indicator | frame | border | size(WIDTH, EQUAL, 45),
+                    text(currentDescription) | vscroll_indicator | frame | border | size(WIDTH, EQUAL, 45)
                 });
             }) | CatchEvent([&](Event event) {
                 if (event == Event::Special("InventoryDisturbed")) {
@@ -41,6 +41,7 @@ namespace game {
         container->DetachAllChildren();
         auto btn = Button("Add Dummy", [&] {inventory.AddItem(Item()); std::cerr << "shwoop!";}, ButtonOption::Simple());
         container->Add(btn);
+
         for (auto const& item : inventory.GetItems()) {
             auto button = Button(std::to_string(c), [&] {
                     currentDescription = std::to_string(c);
@@ -55,17 +56,14 @@ namespace game {
         return inventory.GetItems().size();
     }
 
-    ftxui::Component MakeSettingsTab(bool& musicEnabled, int& volume) {
+    ftxui::Component SettingsUI::GetRenderer() {
         using namespace ftxui;
-
-        auto volume_sl = Slider("Volume:", volume, 0, 100, 1);
-        auto music_cb = Checkbox("Music", &musicEnabled);
-
+        auto volume_sl = Slider("Volume:", &settings.volume, 0, 100, 1);
+        auto music_cb = Checkbox("Music", &settings.musicEnabled);
         auto container = Container::Vertical({
             music_cb,
             volume_sl
             });
-
         return Renderer(container, [music_cb, volume_sl] {
             return vbox({
                 filler(),
@@ -76,24 +74,10 @@ namespace game {
             }) | size(WIDTH, EQUAL, 64) | center;
     }
 
-    ftxui::Component MakeInventoryTab(Inventory& inventory) {
+    ftxui::Component CreaturesUI::GetRenderer() {
         using namespace ftxui;
-
-        return Renderer([&inventory] {
-            std::string editContent = "...";
-
-            auto container = Container::Vertical({});
-
-            auto style = ButtonOption::Animated(Color::Default, Color::GrayDark, Color::Default, Color::White);
-
-            for (auto const& item : inventory.GetItems()) {
-                auto button = Button(std::to_string(item.id), [&item, &editContent] {editContent = std::to_string(item.id);}, style);
-                container->Add(button);
-            }
-
-            return hbox({ container->Render() | border | size(WIDTH, EQUAL, 45),
-                    text(editContent) | border | size(WIDTH, EQUAL, 45)
-                });
+        return Renderer([] {
+            return text("Creatures...");
             });
     }
 
@@ -105,4 +89,4 @@ namespace game {
             return canvas(std::move(c));
             });
     }
-} // namespace game
+} // namespace UI
