@@ -1,7 +1,9 @@
 #include <gtest/gtest.h>
 #include <vector>
 
-#include "data.hpp"
+#include "data/data.hpp"
+
+using namespace data;
 
 TEST(TestMapDefinition, LoadsCorrectTile) {
     MapDefinition map;

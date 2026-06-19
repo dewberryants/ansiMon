@@ -1,7 +1,7 @@
 #include <iostream>
 
-#include "ui.hpp"
-#include "game_state.hpp"
+#include "ui/ui.hpp"
+#include "state/game_state.hpp"
 
 
 namespace UI {
@@ -39,7 +39,7 @@ namespace UI {
         using namespace ftxui;
         int c = 0;
         container->DetachAllChildren();
-        auto btn = Button("Add Dummy", [&] {inventory.AddItem(Item()); std::cerr << "shwoop!";}, ButtonOption::Simple());
+        auto btn = Button("Add Dummy", [&] {inventory.AddItem(game::Item()); std::cerr << "shwoop!";}, ButtonOption::Simple());
         container->Add(btn);
 
         for (auto const& item : inventory.GetItems()) {
@@ -81,7 +81,7 @@ namespace UI {
             });
     }
 
-    ftxui::Component GameCanvas(GameState& state) {
+    ftxui::Component GameCanvas(state::GameState& state) {
         using namespace ftxui;
         return Renderer([] {
             Canvas c = Canvas(90, 22);

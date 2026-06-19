@@ -1,8 +1,9 @@
 #include <gtest/gtest.h>
 
-#include "ui.hpp"
+#include "ui/ui.hpp"
 
-using namespace game;
+using namespace UI;
+
 
 TEST(TestUISetup, InitSuccessful) {
     EXPECT_NO_THROW([]{
@@ -10,12 +11,13 @@ TEST(TestUISetup, InitSuccessful) {
     });
 }
 
-TEST(TestUISetup, AddItems) {
+TEST(TestInventoryUI, AddItems) {
+    using namespace state;
     Inventory MockInventory;
     InventoryUI ui = InventoryUI(MockInventory);
 
     for (int i = 0; i < 10; i++)
-        MockInventory.items.push_back(Item());
+        MockInventory.AddItem(game::Item());
 
     EXPECT_EQ(10, ui.GetInventorySize());
 }

@@ -1,8 +1,5 @@
-#include <ftxui/component/component.hpp>
-#include <ftxui/component/screen_interactive.hpp>
-#include <ftxui/dom/canvas.hpp>
-#include "ui.hpp"
-#include "game_state.hpp"
+#include "ui/ui.hpp"
+#include "state/game_state.hpp"
 
 
 int main() {
@@ -10,7 +7,7 @@ int main() {
 
     int selectedTab = 0;
 
-    GameState state = GameState{};
+    state::GameState state = state::GameState{};
     UI::UIHandler ui;
 
     ScreenInteractive screen = ScreenInteractive::FitComponent();

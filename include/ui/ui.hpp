@@ -2,12 +2,13 @@
 
 #include <ftxui/component/component.hpp>
 #include <ftxui/dom/elements.hpp>
-#include <game_state.hpp>
+#include <state/game_state.hpp>
 
 namespace UI {
+
     class InventoryUI {
     public:
-        InventoryUI(Inventory& inv) : inventory(inv), currentSelection(0), container(ftxui::Container::Vertical({})) {
+        InventoryUI(state::Inventory& inv) : inventory(inv), currentSelection(0), container(ftxui::Container::Vertical({})) {
             RebuildInternals();
         }
         ftxui::Component GetRenderer();
@@ -17,23 +18,23 @@ namespace UI {
         ftxui::Component container;
         std::string currentDescription;
         int currentSelection = 0;
-        Inventory& inventory;
+        state::Inventory& inventory;
     };
 
     class SettingsUI {
     public:
-        SettingsUI(Settings& gameSettings) : settings(gameSettings) {}
+        SettingsUI(state::Settings& gameSettings) : settings(gameSettings) {}
         ftxui::Component GetRenderer();
     private:
-        Settings& settings;
+        state::Settings& settings;
     };
 
     class CreaturesUI {
     public:
-        CreaturesUI(std::vector<Creature>& creatures) : team(creatures) {}
+        CreaturesUI(std::vector<game::Creature>& creatures) : team(creatures) {}
         ftxui::Component GetRenderer();
     private:
-        std::vector<Creature>& team;
+        std::vector<game::Creature>& team;
     };
 
     class UIHandler {
@@ -42,8 +43,8 @@ namespace UI {
         SettingsUI settings = SettingsUI(state.settings);
         CreaturesUI creatures = CreaturesUI(state.player.team);
     private:
-        GameState state;
+        state::GameState state;
     };
 
-    ftxui::Component GameCanvas(GameState& state);
+    ftxui::Component GameCanvas(state::GameState& state);
 } // namespace UI

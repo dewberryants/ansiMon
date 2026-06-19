@@ -35,8 +35,8 @@ FetchContent_MakeAvailable(googletest)
 
 add_executable(AsciiMon 
     src/main.cpp 
-    src/ui.cpp
-    src/data.cpp
+    src/ui/ui.cpp
+    src/data/data.cpp
 )
 
 target_include_directories(AsciiMon PRIVATE
