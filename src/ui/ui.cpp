@@ -80,13 +80,4 @@ namespace UI {
             return text("Creatures...");
             });
     }
-
-    ftxui::Component GameCanvas(state::GameState& state) {
-        using namespace ftxui;
-        return Renderer([] {
-            Canvas c = Canvas(90, 22);
-            c.DrawText(0, 0, "This is the game renderer!");
-            return canvas(std::move(c));
-            });
-    }
 } // namespace UI

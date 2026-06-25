@@ -38,12 +38,13 @@ namespace state {
 
     class World {
     public:
-        game::Scene currentScene;
+        std::unique_ptr<game::Scene> currentScene = std::make_unique<game::Overworld>(90, 22);
     };
 
     class GameState {
     public:
         Settings settings;
         Player player;
+        World world;
     };
 } // namespace state

@@ -8,7 +8,7 @@
 namespace game {
 	class Scene {
 	public:
-		ftxui::Component GetRenderer();
+		virtual ftxui::Component GetRenderer() = 0;
 	};
 
 	struct Map {
@@ -18,16 +18,25 @@ namespace game {
 
 	class PlayerController {
 	public:
-		void move(int x, int y);
-	private:
-		int x;
-		int y;
+		void move(int dx, int dy) {
+			x = x + dx;
+			y = y + dy;
+		}
+		int x = 0;
+		int y = 0;
 	};
 
 	class Overworld : public Scene {
 	public:
+		Overworld(size_t worldWdith, size_t worldHeight) : canvas(std::make_unique<ftxui::Canvas>(worldWdith, worldHeight)) {
+			canvas.get()->DrawText(0, 0, "Hello WOrld!");
+		}
+		ftxui::Component GetRenderer();
 		PlayerController controller;
+		ftxui::Image bg;
 	private:
+		void Redraw();
 		Map currentMap;
+		std::unique_ptr<ftxui::Canvas> canvas;
 	};
 } // namespace game

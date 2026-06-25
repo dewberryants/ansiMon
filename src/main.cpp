@@ -14,7 +14,7 @@ int main() {
 
     Component exitButton = Button("Quit", screen.ExitLoopClosure(), ButtonOption::Ascii());
 
-    Component gameTab = UI::GameCanvas(state);
+    Component gameTab = state.world.currentScene.get()->GetRenderer();
     Component creaturesTab = ui.creatures.GetRenderer();
     Component inventoryTab = ui.inventory.GetRenderer();
     Component settingsTab = ui.settings.GetRenderer();

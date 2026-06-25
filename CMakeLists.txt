@@ -37,7 +37,7 @@ add_executable(AsciiMon
     src/main.cpp 
     src/ui/ui.cpp
     src/data/data.cpp
-)
+ "src/game/scene.cpp")
 
 target_include_directories(AsciiMon PRIVATE
     ${CMAKE_SOURCE_DIR}/src

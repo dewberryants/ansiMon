@@ -45,6 +45,4 @@ namespace UI {
     private:
         state::GameState state;
     };
-
-    ftxui::Component GameCanvas(state::GameState& state);
 } // namespace UI

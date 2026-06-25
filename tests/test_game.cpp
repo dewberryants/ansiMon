@@ -10,3 +10,16 @@ TEST(TestGame, TestLogicStackInit) {
 		state::GameState state;
 		});
 }
+
+TEST(TestOverworld, TestInit) {
+	ASSERT_NO_THROW([] {
+		game::Overworld overworldScene;
+		});
+}
+
+TEST(TestOverworld, TestMove) {
+	game::Overworld overworldScene;
+	overworldScene.controller.move(10, 5);
+	ASSERT_EQ(overworldScene.controller.x, 10);
+	ASSERT_EQ(overworldScene.controller.y, 5);
+}
